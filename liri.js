@@ -4,16 +4,17 @@ var keys = require("./keys.js");
 var axios = require("axios");
 var Spotify = require("node-spotify-api")
 const chalk = require("chalk")
-const chalkAnimation = require('chalk-animation');
+const chalkAnimation=require("chalk-animation")
+const gradient = require('gradient-string');
 var spotify = new Spotify(keys.spotify)
 var fs = require("fs")
 var fromTheTop = process.argv
 var newInput = fromTheTop.slice(2)
 const log = console.log;
-var bandDisplay = chalk.blue.bgRed
-var spotifyDisplay = chalk.white.bgGreen
-var omdbDisplay=chalk.yellow.bgMagenta
 
+var bandDisplay = chalk.blue.bgRed
+var spotifyDisplay = chalk.bgBlack
+var omdbDisplay=chalk.yellow.bgMagenta
 
 concert()
 spotSearch();
@@ -28,6 +29,8 @@ fs.readFile("random.txt", "utf8", function (err, data) {
   newInput=data.split(",")
   
   spotSearch()
+  omdb()
+  concert()
   if (err) {
     return console.log(err)
   }
@@ -49,10 +52,10 @@ function spotSearch() {
           var spotifyResponse = response.tracks.items[index]
 
 
-          log(spotifyDisplay.bold("Song Name : " + spotifyResponse.name))
-          log(spotifyDisplay.bold("Artist Name : " + spotifyResponse.artists[0].name))
-          log(spotifyDisplay.bold("Album Name : " + spotifyResponse.album.name))
-          log(spotifyDisplay.bold("Spotify Preview Link : " + spotifyResponse.external_urls.spotify))
+          log(spotifyDisplay.bold(gradient.rainbow("Song Name : " + spotifyResponse.name)))
+          log(spotifyDisplay.bold(gradient.rainbow("Artist Name : " + spotifyResponse.artists[0].name)))
+          log(spotifyDisplay.bold(gradient.rainbow("Album Name : " + spotifyResponse.album.name)))
+          log(spotifyDisplay.bold(gradient.rainbow("Spotify Preview Link : " + spotifyResponse.external_urls.spotify)))
           log("\n-------------------")
 
 
@@ -75,11 +78,8 @@ function concert() {
           var date = bandData[index].datetime
           var showTime = moment(date).format("MM-DD-YYYY hh:MM")
           log(bandDisplay.bold("Date/Time playing: " + showTime))
-          console.log("------------------------")
           log(bandDisplay.bold("Venue Name: " + bandData[index].venue.name))
-          console.log("------------------------")
           log(bandDisplay.bold("Country: " + bandData[index].venue.country))
-          console.log("------------------------")
           log(bandDisplay.bold("City: " + bandData[index].venue.city))
           console.log("------------------------")
           console.log("\n")
@@ -113,7 +113,7 @@ axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie).then(
   function (movieResponse) {
     console.log(movieResponse)
     var movieInfo=movieResponse.data
-    
+    console.log("------------------------")
     log(omdbDisplay.bold("Title : " + movieInfo.Title))
     log(omdbDisplay.bold("Year : "+movieInfo.Year))
     log(omdbDisplay.bold("IMDB rating : " +movieInfo.imdbRating))
@@ -121,10 +121,12 @@ axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie).then(
     log(omdbDisplay.bold("Language : "+movieInfo.Language))
     log(omdbDisplay.bold("Plot : " +movieInfo.Plot))
     log(omdbDisplay.bold("Actors : " +movieInfo.Actors))
+    console.log("------------------------")
   })
 }
 
 }
+
 console.log("here are the commands!")
 console.log("concert-this [enter artist name]")
 console.log("spotify-this-song [enter song name]")
