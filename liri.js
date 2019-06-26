@@ -134,13 +134,6 @@ function omdb() {
 
 }
 
-console.log("here are the commands!")
-console.log("concert-this [enter artist name]")
-console.log("spotify-this-song [enter song name]")
-console.log("movie-this [enter movie title]")
-console.log("do-what-it-says[edit random.txt with song name]")
-console.log("\n")
-
 function logText() {
   fs.appendFile("log.txt", newInput + "\n", function (err) {
     if (err) {
