@@ -10,27 +10,35 @@ var spotify = new Spotify(keys.spotify)
 var fs = require("fs")
 var fromTheTop = process.argv
 var newInput = fromTheTop.slice(2)
+
+
+
+var test=newInput.slice(1).join(" ")
+console.log(test)
+var param=newInput[0]
+
 const log = console.log;
 
 var bandDisplay = chalk.blue.bgRed
 var spotifyDisplay = chalk.bgBlack
 var omdbDisplay = chalk.yellow.bgMagenta
 
-concert()
-spotSearch();
-omdb();
-read();
+concert(param,test)
+spotSearch(param,test);
+omdb(param,test);
+read(param,test);
 
 function read() {
-  if (newInput[0] === "do-what-it-says") {
+  if (param === "do-what-it-says") {
     fs.readFile("random.txt", "utf8", function (err, data) {
-      console.log(data)
+     
       fromTheTop.slice(2)
-      newInput = data.split(",")
-
-      spotSearch()
-      omdb()
-      concert()
+      test = data.split(",")
+      var readParam1=test[0]
+      var readParam2=test[1]
+      spotSearch(readParam1,readParam2)
+      omdb(readParam1,readParam2)
+      concert(readParam1,readParam2)
       if (err) {
         return console.log(err)
       }
@@ -39,11 +47,11 @@ function read() {
   }
 }
 
-function spotSearch() {
-  if(newInput[0].toLowerCase()==="spotify-this-song"){
+function spotSearch(param,test) {
+  if(param==="spotify-this-song"){
   logText();
-  if (newInput[1] !== undefined) {
-    var song = newInput[1]
+  if (test.length>0) {
+    var song = test
 
     spotify.search({
         type: 'track',
@@ -57,7 +65,7 @@ function spotSearch() {
         }
 
       })
-  } else if (newInput[1] === undefined) {
+  } else{
     var placeholder = "The Sign ace of base"
     spotify.search({
         type: 'track',
@@ -75,10 +83,10 @@ function spotSearch() {
 }
 }
 
-function concert() {
+function concert(param,test) {
 
-  if (newInput[0].toLowerCase() === "concert-this") {
-    var artist = newInput[1]
+  if (param=== "concert-this") {
+    var artist = test
     logText();
     axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp").then(
       function (response) {
@@ -102,26 +110,22 @@ function concert() {
 
 function omdb() {
   
-  if (newInput[0] === "movie-this") {
+  if (param === "movie-this") {
     logText();
 
-    if (newInput[1] !== undefined) {
-      var movie = newInput[1]
-      // console.log(newInput[1])
-
-
+    if (test.length>0) {
+      var movie = test
       axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + movie).then(
         function (movieResponse) {
           var movieInfo = movieResponse.data
           omdbLog(movieInfo)
         }
       )
-    } else if (newInput[1] === undefined) {
+    } else {
       var nobody = "Mr+Nobody"
-      
       axios.get("http://www.omdbapi.com/?apikey=trilogy&t=" + nobody).then(
         function (movieResponse) {
-          // console.log(movieResponse)
+          
           var movieInfo = movieResponse.data
           omdbLog(movieInfo)
         })
