@@ -107,7 +107,7 @@ function concert(param,test) {
     )
   }
 }
-
+ 
 function omdb() {
   
   if (param === "movie-this") {
@@ -147,10 +147,14 @@ function omdbLog(movieInfo) {
   log(omdbDisplay.bold("Title : " + movieInfo.Title))
   log(omdbDisplay.bold("Year : " + movieInfo.Year))
   log(omdbDisplay.bold("IMDB rating : " + movieInfo.imdbRating))
+  if(movieInfo.Ratings[1]){
+  log(omdbDisplay.bold("Rotten Tomatoes : " + movieInfo.Ratings[1].Value))
+  }
   log(omdbDisplay.bold("Country : " + movieInfo.Country))
   log(omdbDisplay.bold("Language : " + movieInfo.Language))
   log(omdbDisplay.bold("Plot : " + movieInfo.Plot))
   log(omdbDisplay.bold("Actors : " + movieInfo.Actors))
+  console.log(movieInfo)
   console.log("------------------------")
 }
 function logSpotify(spotifyResponse){
